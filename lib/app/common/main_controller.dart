@@ -62,6 +62,8 @@ class MainController extends FullLifeCycleController with BaseController, FullLi
     _configureSelectNotificationSubject();
   }
 
+@override
+void onHidden() {}
 
   Future<void> _isAndroidPermissionGranted() async {
     if (Platform.isAndroid) {
@@ -101,7 +103,7 @@ class MainController extends FullLifeCycleController with BaseController, FullLi
       flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>();
 
-      final bool? granted = await androidImplementation?.requestPermission();
+      final bool? granted = await androidImplementation?.requestNotificationsPermission();
       // setState(() {
         _notificationsEnabled = granted ?? false;
       // });

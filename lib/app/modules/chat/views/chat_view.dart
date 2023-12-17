@@ -590,7 +590,7 @@ class ChatView extends GetView<ChatController> {
                           Constants.mNotification)
                       ? SwipeTo(
                           key: ValueKey(chatList[index].messageId),
-                          onRightSwipe: () {
+                          onRightSwipe: (details) { 
                             if (!chatList[index].isMessageRecalled.value &&
                                 !chatList[index].isMessageDeleted &&
                                 chatList[index]

@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
+import 'package:flutter_libphonenumber/flutter_libphonenumber.dart' as flutter_libphonenumber;
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mirror_fly_demo/app/common/constants.dart';
@@ -98,7 +98,8 @@ class ProfileController extends GetxController {
         } else {
           if (await AppUtils.isNetConnected()) {
             debugPrint("profile update");
-            var parse = await FlutterLibphonenumber().parse(profileMobile.text);
+            await flutter_libphonenumber.init();
+            var parse = await flutter_libphonenumber.parse(profileMobile.text);
             debugPrint("parse-----> $parse");
             var unformatted = parse['national_number'];//profileMobile.text.replaceAll(" ", "").replaceAll("+", "");
             Mirrorfly
@@ -428,10 +429,10 @@ class ProfileController extends GetxController {
         formattingMobileNumber = text;
       }
     }*/
-    FlutterLibphonenumber().init();
-    var formatNumberSync = FlutterLibphonenumber().formatNumberSync(m);
+    await flutter_libphonenumber.init();
+    var formatNumberSync = flutter_libphonenumber.formatNumberSync(m);
     try {
-      var parse = await FlutterLibphonenumber().parse(formatNumberSync);
+      var parse = await flutter_libphonenumber.parse(formatNumberSync);
       debugPrint("parse-----> $parse");
       //{country_code: 91, e164: +91xxxxxxxxxx, national: 0xxxxx xxxxx, type: mobile, international: +91 xxxxx xxxxx, national_number: xxxxxxxxxx, region_code: IN}
       if (parse.isNotEmpty) {

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart' as emojipicker;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mirror_fly_demo/app/data/helper.dart';
@@ -405,24 +405,24 @@ class EmojiLayout extends StatelessWidget {
       this.onBackspacePressed})
       : super(key: key);
   final TextEditingController textController;
-  final Function(Category?, Emoji)? onEmojiSelected;
+  final Function(emojipicker.Category?, emojipicker.Emoji)? onEmojiSelected;
   final Function()? onBackspacePressed;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 250,
-      child: EmojiPicker(
+      child: emojipicker.EmojiPicker(
         onBackspacePressed: onBackspacePressed,
         onEmojiSelected: onEmojiSelected,
         textEditingController: textController,
-        config: Config(
+        config: emojipicker.Config(
           columns: 7,
           emojiSizeMax: 32 * (Platform.isIOS ? 1.30 : 1.0),
           verticalSpacing: 0,
           horizontalSpacing: 0,
           gridPadding: EdgeInsets.zero,
-          initCategory: Category.RECENT,
+          initCategory: emojipicker.Category.RECENT,
           bgColor: const Color(0xFFF2F2F2),
           indicatorColor: Colors.blue,
           iconColor: Colors.grey,
@@ -434,8 +434,8 @@ class EmojiLayout extends StatelessWidget {
           // showRecentsTab: true,
           recentsLimit: 28,
           tabIndicatorAnimDuration: kTabScrollDuration,
-          categoryIcons: const CategoryIcons(),
-          buttonMode: ButtonMode.CUPERTINO,
+          categoryIcons: const emojipicker.CategoryIcons(),
+          buttonMode: emojipicker.ButtonMode.CUPERTINO,
         ),
       ),
     );

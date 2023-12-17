@@ -139,4 +139,7 @@ class MediaPreviewController extends FullLifeCycleController with FullLifeCycleM
 
   @override
   void onInactive() {}
+
+  @override
+  void onHidden() {}
 }

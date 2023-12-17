@@ -1242,6 +1242,9 @@ class DashboardController extends FullLifeCycleController
     checkContactSyncPermission();
   }
 
+  @override
+  void onHidden() {}
+
   void getProfileDetail(context, RecentChatData chatItem, int index) {
     getProfileDetails(chatItem.jid.checkNull()).then((value) {
       profile_(value);

@@ -46,6 +46,9 @@ class AppLockController extends FullLifeCycleController
     }
   }
 
+  @override
+  void onHidden() {}
+
   final modifyPin = false.obs;
   final TextEditingController newPin = TextEditingController();
   final TextEditingController confirmPin = TextEditingController();

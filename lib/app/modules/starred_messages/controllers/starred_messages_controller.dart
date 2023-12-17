@@ -703,6 +703,9 @@ class StarredMessagesController extends FullLifeCycleController with FullLifeCyc
     userUpdatedHisProfile(jid);
   }
 
+@override
+void onHidden() {}
+
   @override
   void onDetached() {}
 

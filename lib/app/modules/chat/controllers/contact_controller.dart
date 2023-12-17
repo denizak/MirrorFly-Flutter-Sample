@@ -122,6 +122,9 @@ class ContactController extends FullLifeCycleController
     searchQuery.dispose();
   }
 
+  @override
+  void onHidden() {}
+
   final deBouncer = DeBouncer(milliseconds: 700);
   RxString lastInputValue = "".obs;
 

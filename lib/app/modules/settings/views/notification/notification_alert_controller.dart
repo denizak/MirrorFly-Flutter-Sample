@@ -56,6 +56,8 @@ with FullLifeCycleMixin {
     displayMutePreference();
   }
 
+@override
+void onHidden() {}
 
   showCustomTones() {
     // var uri = SessionManagement.getNotificationUri();

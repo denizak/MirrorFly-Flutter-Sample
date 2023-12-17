@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:core';
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
@@ -8,7 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
+import 'package:flutter_libphonenumber/flutter_libphonenumber.dart' as flutter_libphonenumber;
 import 'package:get/get.dart';
 // import 'package:google_cloud_translation/google_cloud_translation.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -68,7 +69,7 @@ class ChatController extends FullLifeCycleController
 
   late String audioSavePath;
   late String recordedAudioPath;
-  late Record record;
+  late AudioRecorder record;
 
   TextEditingController messageController = TextEditingController();
 
@@ -196,6 +197,9 @@ class ChatController extends FullLifeCycleController
       mirrorFlyLog("typing", "typing..");
     });
   }
+
+  @override
+  void onHidden() {}
 
   var showHideRedirectToLatest = false.obs;
 
@@ -1044,7 +1048,7 @@ class ChatController extends FullLifeCycleController
       debugPrint(result.files.first.extension);
       if (checkFileUploadSize(result.files.single.path!, Constants.mAudio)) {
         AudioPlayer player = AudioPlayer();
-        player.setUrl(result.files.single.path!);
+        player.setSourceUrl(result.files.single.path!);
         player.onDurationChanged.listen((Duration duration) {
           mirrorFlyLog("", 'max duration: ${duration.inMilliseconds}');
           filePath.value = (result.files.single.path!);
@@ -1912,18 +1916,20 @@ class ChatController extends FullLifeCycleController
     if (!busyStatus.checkNull()) {
       var permission = await AppPermission.getStoragePermission();
       if (permission) {
-        if (await Record().hasPermission()) {
-          record = Record();
+        if (await AudioRecorder().hasPermission()) {
+          record = AudioRecorder();
           timerInit("00:00");
           isAudioRecording(Constants.audioRecording);
           startTimer();
-          await record.start(
-            path:
-                "$audioSavePath/audio_${DateTime.now().millisecondsSinceEpoch}.m4a",
-            encoder: AudioEncoder.AAC,
-            bitRate: 128000,
-            samplingRate: 44100,
-          );
+          final recordConfig = RecordConfig(encoder: AudioEncoder.aacLc, bitRate: 128000, sampleRate: 44100);
+          record.start(recordConfig, path: "$audioSavePath/audio_${DateTime.now().millisecondsSinceEpoch}.m4a");
+          // await record.start(
+          //   path:
+          //       "$audioSavePath/audio_${DateTime.now().millisecondsSinceEpoch}.m4a",
+          //   encoder: AudioEncoder.aacLc,
+          //   bitRate: 128000,
+          //   samplingRate: 44100,
+          // );
           Future.delayed(const Duration(seconds: 300), () {
             if (isAudioRecording.value == Constants.audioRecording) {
               stopRecording();
@@ -1942,7 +1948,7 @@ class ChatController extends FullLifeCycleController
     isUserTyping(true);
     _audioTimer?.cancel();
     _audioTimer = null;
-    await Record().stop().then((filePath) async {
+    await AudioRecorder().stop().then((filePath) async {
       if (File(filePath!).existsSync()) {
         recordedAudioPath = filePath;
       } else {
@@ -2847,9 +2853,10 @@ class ChatController extends FullLifeCycleController
         ? profile.nickName.checkNull()
         : profile.name.checkNull();
     if (phone.isNotEmpty) {
-      FlutterLibphonenumber().init();
-      var formatNumberSync = FlutterLibphonenumber().formatNumberSync(phone);
-      var parse = await FlutterLibphonenumber().parse(formatNumberSync);
+      // FlutterLibphonenumber().init();
+      await flutter_libphonenumber.init();
+      var formatNumberSync = flutter_libphonenumber.formatNumberSync(phone);
+      var parse = await flutter_libphonenumber.parse(formatNumberSync);
       debugPrint("parse-----> $parse");
       Mirrorfly.addContact(parse["international"], userName).then((value) {
         if (value ?? false) {

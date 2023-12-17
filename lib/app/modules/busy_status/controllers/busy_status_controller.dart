@@ -37,6 +37,9 @@ class BusyStatusController extends FullLifeCycleController with FullLifeCycleMix
     getMyBusyStatusList();
   }
 
+  @override
+  void onHidden() {}
+
   void getMyBusyStatus() {
     Mirrorfly.getMyBusyStatus().then((value) {
       var userBusyStatus = json.decode(value);

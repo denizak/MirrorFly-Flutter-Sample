@@ -48,6 +48,9 @@ class StatusListController extends FullLifeCycleController with FullLifeCycleMix
     });
   }
 
+  @override
+  void onHidden() {}
+
   updateStatus([String? statusText, String? statusId]) async {
     debugPrint("updating item details--> $statusId");
     if(await AppUtils.isNetConnected()) {

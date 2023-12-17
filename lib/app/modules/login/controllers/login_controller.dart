@@ -308,7 +308,7 @@ class LoginController extends GetxController {
       // if(mobileNumber.text.length > 9) {
       showLoading();
       Mirrorfly.registerUser(
-          countryCode!.replaceAll('+', '') + mobileNumber.text, token: SessionManagement.getToken().checkNull())
+          countryCode!.replaceAll('+', '') + mobileNumber.text)
           .then((value) {
         if (value.contains("data")) {
           var userData = registermodel.registerModelFromJson(value); //message
